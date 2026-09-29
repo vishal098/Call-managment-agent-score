@@ -70,7 +70,3 @@ Each call document stores the original AI score and flagged issues alongside a `
 - `POST /api/calls/:id/reviews` appends a versioned manager review without overwriting the AI score.
 - `GET /api/agents` returns agents for the dashboard selector.
 - `GET /api/agents/:agentId/analytics?from=...&to=...` returns average AI and manager scores, score trend, total AI-flagged issue counts, and manager-confirmed issue counts.
-
-## Interview Summary
-
-"This is a MERN call-quality review tool. React provides the call queue, review workflow, and agent dashboard. Express exposes the call and analytics APIs, and Mongoose stores calls in MongoDB. The important data-integrity choice is that manager reviews are appended as versions; the original AI score and flags are preserved, so we can compare automated scoring with manager judgment over time."
