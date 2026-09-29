@@ -9,6 +9,7 @@ Fieldnote is a MERN call-center QA tool. It gives managers a review queue for AI
 - Lets a manager adjust the score, confirm or dismiss each issue, and add a coaching note.
 - Tracks agent AI-versus-manager score trends and issue counts over a selected date range.
 - Seeds 42 representative calls across six agents for a ready-to-demo workspace.
+- Accepts audio uploads and, when an OpenAI API key is configured, transcribes and scores them automatically.
 
 ## Design decisions
 
@@ -31,7 +32,7 @@ MongoDB and Mongoose for persistence; Express and Node.js for the REST API; Reac
 Requirements: Node.js 20+ and MongoDB 7+ (local or MongoDB Atlas).
 
 1. Install dependencies: `npm install`
-2. Copy `.env.example` to `.env` and set `MONGODB_URI` to your MongoDB connection string.
+2. Copy `.env.example` to `.env` and set `MONGODB_URI`. Set `OPENAI_API_KEY` to enable recording transcription and scoring; the model names can be changed with `OPENAI_TRANSCRIPTION_MODEL` and `OPENAI_SCORING_MODEL`.
 3. Start MongoDB. On macOS with Homebrew:
 
 	```sh
@@ -44,6 +45,12 @@ Requirements: Node.js 20+ and MongoDB 7+ (local or MongoDB Atlas).
 4. Seed demo calls: `npm run seed`
 5. Start the API and client: `npm run dev`
 6. Open `http://localhost:5173`.
+
+## Recording analysis
+
+Use **Upload recording** from the call queue. The API accepts MP3, WAV, M4A, AAC, FLAC, OGG, and WEBM files up to 100 MB. With `OPENAI_API_KEY` configured, transcription and scoring start after upload; otherwise the call remains queued and can be analyzed after configuration. Failed analyses can be retried from the call detail panel.
+
+Audio files are stored under `uploads/recordings` for local development and are excluded from Git. Analysis runs in the API process, so production deployments should move recordings to private object storage, protect playback with authorization, and use a durable job queue. Review recording consent, retention, and provider data-handling requirements before using real customer calls.
 
 MongoDB Atlas also works with the same `MONGODB_URI` setting. Never commit Atlas credentials.
 
